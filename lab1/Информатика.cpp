@@ -22,60 +22,58 @@ int main()
     {
         int N, i, j;
         cout << "Введите N" << endl;
-        cin >> N;
-        for (j = 1; j <= N; j++)
+        cin >> N;  
+        if (num == 2)
         {
-            if (num == 2)
+            for (j = 1; j <= N; j++)
             {
-                for (j = 1; j <= N; j++)
+                for (i = 1; i <= N; i++)
+                {
+                    cout << "*";
+                }
+                cout << endl;
+            }
+        }
+        if (num == 3)
+            for (j = 1; j <= N; j++)
+            {
                 {
                     for (i = 1; i <= N; i++)
-                    {
-                        cout << "*";
-                    }
+                        if (i <= j)
+                        {
+                            cout << "*";
+                        }
                     cout << endl;
                 }
             }
-            if (num == 3)
-                for (j = 1; j <= N; j++)
+        if (num == 4)
+            for (j = 1; j <= N; j++)
+            {
                 {
-                    {
-                        for (i = 1; i <= N; i++)
-                            if (i <= j)
-                            {
-                                cout << "*";
-                            }
-                        cout << endl;
-                    }
+                    for (i = 1; i <= N; i++)
+                        if (i >= j)
+                        {
+                            cout << "*";
+                        }
+                    cout << endl;
                 }
-            if (num == 4)
-                for (j = 1; j <= N; j++)
+            }
+        if (num == 5)
+            for (j = 1; j <= N; j++)
+            {
                 {
-                    {
-                        for (i = 1; i <= N; i++)
-                            if (i >= j)
-                            {
-                                cout << "*";
-                            }
-                        cout << endl;
-                    }
+                    for (i = 1; i <= N - j + 1; i++)
+                        if (i < j)
+                        {
+                            cout << " ";
+                        }
+                        else
+                        {
+                            cout << "*";
+                        }
+                    cout << endl;
                 }
-            if (num == 5)
-                for (j = 1; j <= N; j++)
-                {
-                    {
-                        for (i = 1; i <= N - j + 1; i++)
-                            if (i < j)
-                            {
-                                cout << " ";
-                            }
-                            else
-                            {
-                                cout << "*";
-                            }
-                        cout << endl;
-                    }
-                }
-        }
+            }
+     
     }
 }
