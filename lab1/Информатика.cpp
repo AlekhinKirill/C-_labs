@@ -1,6 +1,8 @@
 ﻿#include <iostream>
-using namespace std;
 #include <cmath>
+
+using namespace std;
+
 int main()
 {
     setlocale(0, "");
@@ -16,7 +18,7 @@ int main()
         c = pow(pow(a, 2) + pow(b, 2), 0.5);
         cout << "Гипотенуза = " << c << endl;
     }
-    if (num != 1)
+    else
     {
         int N, i, j;
         cout << "Введите N" << endl;
@@ -25,43 +27,55 @@ int main()
         {
             if (num == 2)
             {
-                for (i = 1; i <= N; i++)
+                for (j = 1; j <= N; j++)
                 {
-                    cout << "*";
+                    for (i = 1; i <= N; i++)
+                    {
+                        cout << "*";
+                    }
+                    cout << endl;
                 }
-                cout << endl;
             }
             if (num == 3)
-            {
-                for (i = 1; i <= N; i++)
-                    if (i <= j)
+                for (j = 1; j <= N; j++)
+                {
                     {
-                        cout << "*";
+                        for (i = 1; i <= N; i++)
+                            if (i <= j)
+                            {
+                                cout << "*";
+                            }
+                        cout << endl;
                     }
-                cout << endl;
-            }
+                }
             if (num == 4)
-            {
-                for (i = 1; i <= N; i++)
-                    if (i >= j)
+                for (j = 1; j <= N; j++)
+                {
                     {
-                        cout << "*";
+                        for (i = 1; i <= N; i++)
+                            if (i >= j)
+                            {
+                                cout << "*";
+                            }
+                        cout << endl;
                     }
-                cout << endl;
-            }
+                }
             if (num == 5)
-            {
-                for (i = 1; i <= N - j + 1; i++)
-                    if (i < j)
+                for (j = 1; j <= N; j++)
+                {
                     {
-                        cout << " ";
+                        for (i = 1; i <= N - j + 1; i++)
+                            if (i < j)
+                            {
+                                cout << " ";
+                            }
+                            else
+                            {
+                                cout << "*";
+                            }
+                        cout << endl;
                     }
-                    else
-                    {
-                        cout << "*";
-                    }
-                cout << endl;
-            }
+                }
         }
     }
 }
