@@ -3,9 +3,7 @@ using namespace std;
 
 int main()
 {
-	setlocale(0, "");
 	int num, denum, intermediate, first_number, second_number;
-	cout << "Введите натуральные числа" << endl;
 	cin >> first_number >> second_number;
 	if (first_number >= second_number)
 	{
