@@ -12,7 +12,7 @@ int* my_slightly_dumb_reallocation(int* source, unsigned int n_old, unsigned int
 				arr[j] = source[j];
 		else
 			for (j = 0; j < n_new; j++)
-		        arr[j] = source[j];
+		                arr[j] = source[j];
 		delete[] source;
 		return arr;
 	}
