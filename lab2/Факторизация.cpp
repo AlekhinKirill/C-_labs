@@ -3,15 +3,18 @@ using namespace std;
 
 int main()
 {
-	int number, max;
-	max = 0;
-	do
+	int number, i;
+	cin >> number;
+	while (number > 1)
 	{
-		cin >> number;
-		if ((number % 2 == 0) && (number > max))
+		for (i = 2; i <= number; i++)
 		{
-			max = number;
+			if (number % i == 0)
+			{
+				number = number / i;
+				cout << i << endl;
+				break;
+			}
 		}
-	} while (number != 0);
-	cout << max << endl;
+	}
 }
