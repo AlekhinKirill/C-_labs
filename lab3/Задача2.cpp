@@ -3,8 +3,8 @@ using namespace std;
 
 int* now_get_me_some_bytes(int n)
 {
-    int* arr = new int[n];
-    return arr;
+        int* arr = new int[n];
+        return arr;
 }
 
 void now_free_some_bytes(int* p)
