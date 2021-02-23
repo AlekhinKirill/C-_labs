@@ -141,6 +141,79 @@ List merge(List first_list, List second_list)
 	return first_list;
 }
 
+
+List add_i(List list, int value, int i)
+{
+	List new_list;
+	Cells* cell;
+	Cells* new_cell = new Cells;
+	int j;
+	if (i == 1)
+	{
+		new_list = create_empty();
+		new_list.length = list.length + 1;
+		(*new_cell).value = value;
+		(*new_cell).next_ptr = list.first;
+		new_list.first = new_cell;
+		new_list.last = list.last;
+		return new_list;
+	}
+	else if ((list.length != 0) && (list.length >= i))
+	{
+		new_list = create_empty();
+		new_list.length = list.length + 1;
+		cell = list.first;
+		for (j = 1; j < i - 1; j++)
+		{
+			cell = (*cell).next_ptr;
+		}
+		(*new_cell).value = value;
+		(*new_cell).next_ptr = (*cell).next_ptr;
+		(*cell).next_ptr = new_cell;
+		new_list.first = list.first;
+		new_list.last = list.last;
+		return new_list;
+	}
+	else
+	{
+		cout << "В списке нет "<< i << "-ого элемента" << endl;
+		return list;
+	}
+}
+
+List clear()
+{
+	return create_empty();
+}
+
+List del_i(List list, int i)
+{
+	List new_list;
+	Cells* cell;
+	Cells* previous_cell = new Cells;
+	if (i == 1)
+	{
+		return remove(list, (*list.first).value);
+	}
+	else
+	{
+		int j;
+		new_list = create_empty();
+		new_list.length = list.length - 1;
+		cell = list.first;
+		for (j = 1; j < i; j++)
+		{
+			previous_cell = cell;
+			cell = (*cell).next_ptr;
+		}
+		(*previous_cell).next_ptr = (*cell).next_ptr;
+		new_list.first = list.first;
+		new_list.last = list.last;
+		return new_list;
+	}
+}
+
+
 int main()
 {
 	setlocale(0, "");
@@ -152,10 +225,12 @@ int main()
 	list = append(list, 9);
 	list = append(list, 8);
 	list = remove(list, 3);  //удаление последнего элемента ???
+	list = add_i(list, 15, 3);
 	second_list = create_empty();
 	second_list = append(second_list, 4);
 	second_list = append(second_list, 10);
 	second_list = append(second_list, 1);
 	new_list = merge(list, second_list);
+	new_list = del_i(new_list, 6); //удаление первого -???
 	print_list(new_list);
 }
