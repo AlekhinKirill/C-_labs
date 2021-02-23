@@ -71,31 +71,42 @@ List remove(List list, int a)
 	warning = 0;
 	if (list.length >= 2)
 	{
-		cell = (*list.first).next_ptr;
-		previous_cell = list.first;
-		new_list.first = list.first;
-		new_list.length = list.length - 1;
-		while ((*cell).value != a)
+		if ((*list.first).value == a)
 		{
-			if ((*cell).next_ptr != nullptr)
-			{
-				previous_cell = cell;
-				cell = (*cell).next_ptr;
-			}
-			else
-			{
-				cout << "Элемента " << a << " в списке нет!" << endl;
-				warning = 1;
-				break;
-			}
-		}
-		if (warning == 0)
-		{
-			(*previous_cell).next_ptr = (*cell).next_ptr;
+			new_list.first = (*list.first).next_ptr;
+			new_list.length = list.length - 1;
+			new_list.last = list.last;
 			return new_list;
 		}
 		else
-			return list;
+		{
+			cell = (*list.first).next_ptr;
+			previous_cell = list.first;
+			new_list.first = list.first;
+			new_list.length = list.length - 1;
+			new_list.last = list.last;
+			while ((*cell).value != a)
+			{
+				if ((*cell).next_ptr != nullptr)
+				{
+					previous_cell = cell;
+					cell = (*cell).next_ptr;
+				}
+				else
+				{
+					cout << "Элемента " << a << " в списке нет!" << endl;
+					warning = 1;
+					break;
+				}
+			}
+			if (warning == 0)
+			{
+				(*previous_cell).next_ptr = (*cell).next_ptr;
+				return new_list;
+			}
+			else
+				return list;
+		}
 	}
 	else
 	{
@@ -114,12 +125,37 @@ List remove(List list, int a)
 	}
 }
 
+List merge(List first_list, List second_list)
+{
+	Cells* cell;
+	if (second_list.length != 0)
+	{
+		cell = second_list.first;
+		while ((*cell).next_ptr != nullptr)
+		{
+			first_list = append(first_list, (*cell).value);
+			cell = (*cell).next_ptr;
+		}
+		first_list = append(first_list, (*cell).value);
+	}
+	return first_list;
+}
+
 int main()
 {
 	setlocale(0, "");
-	List list;
+	List list, second_list, new_list;
 	list = create_empty();
+	list = append(list, 5);
+	list = append(list, 7);
+	list = append(list, 3);
 	list = append(list, 9);
-	list = remove(list, 9);
-	print_list(list);
+	list = append(list, 8);
+	list = remove(list, 3);  //удаление последнего элемента ???
+	second_list = create_empty();
+	second_list = append(second_list, 4);
+	second_list = append(second_list, 10);
+	second_list = append(second_list, 1);
+	new_list = merge(list, second_list);
+	print_list(new_list);
 }
