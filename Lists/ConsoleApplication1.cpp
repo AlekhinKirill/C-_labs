@@ -102,6 +102,8 @@ List remove(List list, int a)
 			if (warning == 0)
 			{
 				(*previous_cell).next_ptr = (*cell).next_ptr;
+				if ((*cell).next_ptr == nullptr)
+					new_list.last = previous_cell;
 				return new_list;
 			}
 			else
@@ -251,18 +253,34 @@ int index(List list, int value)
 		}
 }
 
+List copy_list(List list)
+{
+	Cells* cell;
+	List copy;
+	copy = create_empty();
+	cell = list.first;
+	while ((*cell).next_ptr != nullptr)
+	{
+		copy = append(copy, (*cell).value);
+		cell = (*cell).next_ptr;
+	}
+	copy = append(copy, (*cell).value);
+	return copy;
+}
+
+
 int main()
 {
 	setlocale(0, "");
-	List list, second_list, new_list;
+	List list, second_list, new_list, copy;
 	list = create_empty();
 	list = append(list, 5);
 	list = append(list, 7);
 	list = append(list, 3);
 	list = append(list, 9);
 	list = append(list, 8);
-	list = remove(list, 3);
-	list = add_i(list, 15, 3);
+	list = remove(list, 9);
+	list = add_i(list, 15, 4);
 	second_list = create_empty();
 	second_list = append(second_list, 4);
 	second_list = append(second_list, 10);
@@ -270,7 +288,9 @@ int main()
 	second_list = append(second_list, 12);
 	second_list = append(second_list, 19);
 	new_list = merge(list, second_list);
-	new_list = del_i(new_list, 6);
+	new_list = del_i(new_list, 8);
 	print_list(new_list);
-	cout << "Номер элемента со значением 9 = "<<  index(new_list, 14) << endl;
+	cout << "Номер элемента со значением 10 = "<<  index(new_list, 10) << endl;
+	copy = copy_list(new_list);
+	print_list(copy);
 }
