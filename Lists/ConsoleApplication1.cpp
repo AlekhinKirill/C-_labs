@@ -213,6 +213,43 @@ List del_i(List list, int i)
 	}
 }
 
+void reverse(List list)
+{
+	int i, j;
+	Cells* cell = new Cells;
+	for (i = 0; i < list.length; i++)
+	{
+		cell = list.first;
+		for (j = 1; j < list.length - i; j++)
+		{
+			cell = (*cell).next_ptr;
+		}
+		cout << (*cell).value << endl;
+	}
+}
+
+int index(List list, int value)
+{
+	int i;
+	Cells* cell;
+	cell = list.first;
+	for (i = 1; i <= list.length; i++)
+		if ((*cell).value == value)
+		{
+			return i;
+			break;
+		}
+		else if ((*cell).next_ptr != nullptr)
+		{
+			cell = (*cell).next_ptr;
+		}
+		else
+		{
+			cout << "В списке нет элемента " << value << endl;
+			return NULL;
+			break;
+		}
+}
 
 int main()
 {
@@ -224,13 +261,16 @@ int main()
 	list = append(list, 3);
 	list = append(list, 9);
 	list = append(list, 8);
-	list = remove(list, 3);  //удаление последнего элемента ???
+	list = remove(list, 3);
 	list = add_i(list, 15, 3);
 	second_list = create_empty();
 	second_list = append(second_list, 4);
 	second_list = append(second_list, 10);
 	second_list = append(second_list, 1);
+	second_list = append(second_list, 12);
+	second_list = append(second_list, 19);
 	new_list = merge(list, second_list);
-	new_list = del_i(new_list, 6); //удаление первого -???
+	new_list = del_i(new_list, 6);
 	print_list(new_list);
+	cout << "Номер элемента со значением 9 = "<<  index(new_list, 14) << endl;
 }
