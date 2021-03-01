@@ -184,11 +184,6 @@ List add_i(List list, int value, int i)
 	}
 }
 
-List clear()
-{
-	return create_empty();
-}
-
 List del_i(List list, int i)
 {
 	List new_list;
