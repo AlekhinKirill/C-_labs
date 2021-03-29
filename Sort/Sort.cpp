@@ -75,7 +75,7 @@ Arrays merge(Arrays first_array, Arrays second_array)
 
 Arrays Merge_sort(Arrays array)
 {
-	Arrays first_array, second_array, result;
+	Arrays first_array, second_array;
 	int i, j;
 	if (array.length <= 10)
 	{
@@ -102,11 +102,58 @@ Arrays Merge_sort(Arrays array)
 }
 
 
+Arrays quicksort(Arrays array)
+{
+	Arrays first_array, second_array, third_array, result;
+	first_array.values = new int[array.length];
+	second_array.values = new int[array.length];
+	third_array.values = new int[array.length];
+	first_array.length = second_array.length = third_array.length = 0;
+	int n, i;
+	n = 2*array.length/3;
+	for (i = 0; i < array.length; i++)
+	{
+		if (array.values[i] < array.values[n])
+		{
+			first_array.values[first_array.length] = array.values[i];
+			first_array.length += 1;
+		}
+		else if (array.values[i] == array.values[n])
+		{
+			second_array.values[second_array.length] = array.values[i];
+			second_array.length += 1;
+		}
+		else
+		{
+			third_array.values[third_array.length] = array.values[i];
+			third_array.length += 1;
+		}
+	}
+	if (first_array.length > 1)
+	{
+		first_array = quicksort(first_array);
+	}
+	if (third_array.length > 1)
+	{
+		third_array = quicksort(third_array);
+	}
+	result.values = new int[first_array.length + second_array.length + third_array.length];
+	result.length = first_array.length + second_array.length + third_array.length;
+	for (i = 0; i < first_array.length; i++)
+		result.values[i] = first_array.values[i];
+	for (i = first_array.length; i < first_array.length + second_array.length; i++)
+		result.values[i] = second_array.values[i - first_array.length];
+	for (i = first_array.length + second_array.length; i < first_array.length + second_array.length + third_array.length; i++)
+		result.values[i] = third_array.values[i - first_array.length - second_array.length];
+	return result;
+}
+
+
 int main()
 {
-	Arrays array, x;
+	Arrays array;
 	int i, j, k, N;
-	N = 37;
+	N = 34;
 	array.values = new int[N];
 	i = 0;
 	for (i = 0; i < N; i++)
@@ -115,4 +162,5 @@ int main()
 	print_array(array);
 	print_array(Bubble_sort(array, "ascending"));
 	print_array(Merge_sort(array));
+	print_array(quicksort(array));
 }
