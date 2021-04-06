@@ -2,299 +2,89 @@
 using namespace std;
 
 
-struct Cells
+struct Cell
 {
 	int value;
-	Cells* next_ptr;
+	Cell* next_ptr;
 };
 
-struct List
+
+struct Stack
 {
 	int length;
-	Cells* first;
-	Cells* last;
+	Cell* last;
+	Cell* first;
 };
 
-List create_empty()
+
+Stack create_empty()
 {
-	List list;
-	list.length = 0;
-	list.first = nullptr;
-	list.last = nullptr;
-	return list;
+	Stack stack;
+	stack.length = 0;
+	stack.last = nullptr;
+	return stack;
 }
 
-List push(List list, int value)
+
+Stack push(Stack stack, int value)
 {
-	Cells* cell = new Cells;
-	(*cell).value = value;
-	(*cell).next_ptr = nullptr;
-	if (list.length == 0)
+	Cell* cell = new Cell;
+	cell->value = value;
+	cell->next_ptr = nullptr;
+	if (stack.length == 0)
 	{
-		list.first = cell;
+		stack.first = cell;
+		stack.last = cell;
 	}
 	else
 	{
-		if (list.length == 1)
-		{
-			list.last = list.first;
-			(*list.first).next_ptr = cell;
-		}
-		(*list.last).next_ptr = cell;
-		list.last = cell;
+		stack.last->next_ptr = cell;
+		stack.last = cell;
 	}
-	list.length += 1;
-	return list;
+	stack.length += 1;
+	return stack;
 }
 
-void print_list(List list)
+
+Stack pop(Stack stack)
 {
-	if (list.length == 0)
-		cout << "Лист пуст" << endl;
-	else
-	{
-		Cells last_cell;
-		last_cell = *list.first;
-		while (last_cell.next_ptr != nullptr)
-		{
-			cout << last_cell.value << endl;
-			last_cell = *last_cell.next_ptr;
-		}
-		cout << last_cell.value << endl;
-	}
+	Cell* cell;
+	cell = stack.first;
+	while (cell->next_ptr->next_ptr != nullptr)
+		cell = cell->next_ptr;
+	cell->next_ptr = nullptr;
+	stack.last = cell;
+	stack.length -= 1;
+	return stack;
 }
 
-List remove(List list, int a)
+
+void print(Stack queue)
 {
-	List new_list;
-	Cells *cell, *previous_cell;
-	int warning;
-	warning = 0;
-	if (list.length >= 2)
+	Cell* element_ptr;
+	element_ptr = queue.first;
+	cout << queue.first->value << " ";
+	while (element_ptr->next_ptr != nullptr)
 	{
-		if ((*list.first).value == a)
-		{
-			new_list.first = (*list.first).next_ptr;
-			new_list.length = list.length - 1;
-			new_list.last = list.last;
-			return new_list;
-		}
-		else
-		{
-			cell = (*list.first).next_ptr;
-			previous_cell = list.first;
-			new_list.first = list.first;
-			new_list.length = list.length - 1;
-			new_list.last = list.last;
-			while ((*cell).value != a)
-			{
-				if ((*cell).next_ptr != nullptr)
-				{
-					previous_cell = cell;
-					cell = (*cell).next_ptr;
-				}
-				else
-				{
-					cout << "Элемента " << a << " в списке нет!" << endl;
-					warning = 1;
-					break;
-				}
-			}
-			if (warning == 0)
-			{
-				(*previous_cell).next_ptr = (*cell).next_ptr;
-				if ((*cell).next_ptr == nullptr)
-					new_list.last = previous_cell;
-				return new_list;
-			}
-			else
-				return list;
-		}
+		cout << element_ptr->next_ptr->value << " ";
+		element_ptr = element_ptr->next_ptr;
 	}
-	else
-	{
-		if (list.length == 0)
-			return list;
-		else
-		{
-			if ((*list.first).value == a)
-				return create_empty();
-			else
-			{
-				cout << "Элемента " << a << " в списке нет!" << endl;
-				return list;
-			}
-		}
-	}
+	cout << endl;
 }
-
-List merge(List first_list, List second_list)
-{
-	Cells* cell;
-	if (second_list.length != 0)
-	{
-		cell = second_list.first;
-		while ((*cell).next_ptr != nullptr)
-		{
-			first_list = push(first_list, (*cell).value);
-			cell = (*cell).next_ptr;
-		}
-		first_list = push(first_list, (*cell).value);
-	}
-	return first_list;
-}
-
-
-List add_i(List list, int value, int i)
-{
-	List new_list;
-	Cells* cell;
-	Cells* new_cell = new Cells;
-	int j;
-	if (i == 1)
-	{
-		new_list = create_empty();
-		new_list.length = list.length + 1;
-		(*new_cell).value = value;
-		(*new_cell).next_ptr = list.first;
-		new_list.first = new_cell;
-		new_list.last = list.last;
-		return new_list;
-	}
-	else if ((list.length != 0) && (list.length >= i))
-	{
-		new_list = create_empty();
-		new_list.length = list.length + 1;
-		cell = list.first;
-		for (j = 1; j < i - 1; j++)
-		{
-			cell = (*cell).next_ptr;
-		}
-		(*new_cell).value = value;
-		(*new_cell).next_ptr = (*cell).next_ptr;
-		(*cell).next_ptr = new_cell;
-		new_list.first = list.first;
-		new_list.last = list.last;
-		return new_list;
-	}
-	else
-	{
-		cout << "В списке нет "<< i << "-ого элемента" << endl;
-		return list;
-	}
-}
-
-List clear()
-{
-	return create_empty();
-}
-
-List del_i(List list, int i)
-{
-	List new_list;
-	Cells* cell;
-	Cells* previous_cell = new Cells;
-	if (i == 1)
-	{
-		return remove(list, (*list.first).value);
-	}
-	else
-	{
-		int j;
-		new_list = create_empty();
-		new_list.length = list.length - 1;
-		cell = list.first;
-		for (j = 1; j < i; j++)
-		{
-			previous_cell = cell;
-			cell = (*cell).next_ptr;
-		}
-		(*previous_cell).next_ptr = (*cell).next_ptr;
-		new_list.first = list.first;
-		new_list.last = list.last;
-		return new_list;
-	}
-}
-
-void reverse(List list)
-{
-	int i, j;
-	Cells* cell = new Cells;
-	for (i = 0; i < list.length; i++)
-	{
-		cell = list.first;
-		for (j = 1; j < list.length - i; j++)
-		{
-			cell = (*cell).next_ptr;
-		}
-		cout << (*cell).value << endl;
-	}
-}
-
-int index(List list, int value)
-{
-	int i;
-	Cells* cell;
-	cell = list.first;
-	for (i = 1; i <= list.length; i++)
-		if ((*cell).value == value)
-		{
-			return i;
-			break;
-		}
-		else if ((*cell).next_ptr != nullptr)
-		{
-			cell = (*cell).next_ptr;
-		}
-		else
-		{
-			cout << "В списке нет элемента " << value << endl;
-			return NULL;
-			break;
-		}
-}
-
-List copy_list(List list)
-{
-	Cells* cell;
-	List copy;
-	copy = create_empty();
-	cell = list.first;
-	while ((*cell).next_ptr != nullptr)
-	{
-		copy = push(copy, (*cell).value);
-		cell = (*cell).next_ptr;
-	}
-	copy = push(copy, (*cell).value);
-	return copy;
-}
-
-List pop(List list)
-{
-	list = del_i(list, list.length);
-	return list;
-}
-
-int get_value(List list)
-{
-	return list.last->value;
-}
-
 
 
 int main()
 {
-	setlocale(0, "");
-	List stack;
+	Stack stack;
 	stack = create_empty();
 	stack = push(stack, 5);
-	stack = push(stack, 7);
-	stack = push(stack, 3);
-	stack = push(stack, 9);
+	stack = push(stack, 12);
+	stack = push(stack, 17);
+	stack = push(stack, 1);
+	stack = pop(stack);
 	stack = push(stack, 8);
-	cout << "Последний элемент " << get_value(stack) << endl;
+	stack = push(stack, 11);
+	stack = push(stack, 7);
 	stack = pop(stack);
-	stack = pop(stack);
-	cout << "Stack после удаления двух элементов" << endl;
-	print_list(stack);
+	print(stack);
 }
