@@ -34,14 +34,10 @@ Queue enqueue(Queue queue, int value)
 	if (queue.length == 0)
 	{
 		queue.first = cell;
+		queue.last = cell;
 	}
 	else
 	{
-		if (queue.length == 1)
-		{
-			queue.last = queue.first;
-			queue.first->next_ptr = cell;
-		}
 		queue.last->next_ptr = cell;
 		queue.last = cell;
 	}
