@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 using namespace std;
 
+
 struct Cell
 {
 	int value;
@@ -9,11 +10,79 @@ struct Cell
 	Cell* privious_ptr;
 };
 
+
 struct Tree
 {
 	Cell* root;
 	int capacity;
 };
+
+
+struct Queue_elements
+{
+	Cell* value;
+	Queue_elements* next_ptr;
+};
+
+struct Queue
+{
+	int length;
+	Queue_elements* first;
+	Queue_elements* last;
+};
+
+
+Queue create()
+{
+	Queue list;
+	list.length = 0;
+	list.first = nullptr;
+	list.last = nullptr;
+	return list;
+}
+
+
+Queue enqueue(Queue queue, Cell* value_ptr)
+{
+	Queue_elements* element = new Queue_elements;
+	element->value = value_ptr;
+	element->next_ptr = nullptr;
+	if (queue.length == 0)
+	{
+		queue.first = element;
+		queue.last = element;
+	}
+	else
+	{
+		queue.last->next_ptr = element;
+		queue.last = element;
+	}
+	queue.length += 1;
+	return queue;
+}
+
+
+Queue dequeue(Queue queue)
+{
+	queue.first = queue.first->next_ptr;
+	queue.length -= 1;
+	return queue;
+}
+
+
+void print_queue(Queue queue)
+{
+	Queue_elements* element_ptr;
+	element_ptr = queue.first;
+	cout << queue.first->value->value << " ";
+	while (element_ptr->next_ptr != nullptr)
+	{
+		cout << element_ptr->next_ptr->value->value << " ";
+		element_ptr = element_ptr->next_ptr;
+	}
+	cout << endl;
+}
+
 
 Tree create_empty(int value)
 {
@@ -37,25 +106,31 @@ Cell* append_auxiliary_function(int value, Cell* root)
 	if ((value <= cell->value) && (cell->left_ptr != nullptr))
 	{
 		cell = cell->left_ptr;
-		append_auxiliary_function(value, cell);
+		cell = append_auxiliary_function(value, cell);
+		return cell->privious_ptr;
 	}
-	if ((value > cell->value) && (cell->right_ptr != nullptr))
+	else if ((value > cell->value) && (cell->right_ptr != nullptr))
 	{
 		cell = cell->right_ptr;
-		append_auxiliary_function(value, cell);
+		cell = append_auxiliary_function(value, cell);
+		return cell->privious_ptr;
 	}
-	leaf->value = value;
-	leaf->left_ptr = leaf->right_ptr = nullptr;
-	if (value <= cell->value)
-		cell->left_ptr = leaf;
 	else
-		cell->right_ptr = leaf;
-	leaf->privious_ptr = cell;
-	return root;
+	{
+		leaf->value = value;
+		leaf->left_ptr = nullptr;
+		leaf->right_ptr = nullptr;
+		if (value <= cell->value)
+			cell->left_ptr = leaf;
+		else
+			cell->right_ptr = leaf;
+		leaf->privious_ptr = cell;
+		return root;
+	}
 }
 
 
-Tree append(Tree tree,int value)
+Tree append(Tree tree, int value)
 {
 	tree.root = append_auxiliary_function(value, tree.root);
 	tree.capacity += 1;
@@ -63,31 +138,35 @@ Tree append(Tree tree,int value)
 }
 
 
-void left_descent(Cell* cell)
+Queue descent(Queue queue, Cell* cell)
 {
+	Cell* last_knot = new Cell;
+	cout << cell->value << endl;
 	while (cell->left_ptr != nullptr)
 	{
+		if (cell->right_ptr != nullptr)
+			queue = enqueue(queue, cell->right_ptr);
 		cell = cell->left_ptr;
 		cout << cell->value << endl;
 	}
-}
-
-
-void right_descent(Cell* cell)
-{
-	while (cell->right_ptr != nullptr)
-	{
-		cell = cell->right_ptr;
-		cout << cell->value << endl;
-	}
+	if (cell->right_ptr != nullptr)
+		queue = enqueue(queue, cell->right_ptr);
+	queue = dequeue(queue);
+	return queue;
 }
 
 
 void print(Tree tree)
 {
-	cout << tree.root->value << endl;
-	left_descent(tree.root);
-	right_descent(tree.root);
+	Queue queue = create();
+	queue = enqueue(queue, tree.root);
+	while (queue.length != 0)
+	{
+		if (queue.length != 0)
+		{
+			queue = descent(queue, queue.first->value);
+		}
+	}
 }
 
 
@@ -97,9 +176,14 @@ int main()
 	tree = create_empty(10);
 	tree = append(tree, 5);
 	tree = append(tree, 12);
+	tree = append(tree, 9);
+	tree = append(tree, 3);
 	tree = append(tree, 17);
 	tree = append(tree, 1);
 	tree = append(tree, 8);
+	tree = append(tree, 2);
+	tree = append(tree, 6);
+	tree = append(tree, 4);
 	tree = append(tree, 11);
 	tree = append(tree, 7);
 	print(tree);
