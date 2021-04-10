@@ -138,19 +138,24 @@ Tree append(Tree tree, int value)
 }
 
 
-Queue descent(Queue queue, Cell* cell)
+Queue descent(Queue queue, Cell* cell, string mod)
 {
 	Cell* last_knot = new Cell;
-	cout << cell->value << endl;
+	if (mod == "print")
+		cout << cell->value << endl;
 	while (cell->left_ptr != nullptr)
 	{
 		if (cell->right_ptr != nullptr)
 			queue = enqueue(queue, cell->right_ptr);
 		cell = cell->left_ptr;
-		cout << cell->value << endl;
+		if (mod == "print")
+			cout << cell->value << endl;
 	}
 	if (cell->right_ptr != nullptr)
 		queue = enqueue(queue, cell->right_ptr);
+	else
+		if (mod == "print_leaves")
+			cout << cell->value << endl;
 	queue = dequeue(queue);
 	return queue;
 }
@@ -164,7 +169,21 @@ void print(Tree tree)
 	{
 		if (queue.length != 0)
 		{
-			queue = descent(queue, queue.first->value);
+			queue = descent(queue, queue.first->value, "print");
+		}
+	}
+}
+
+
+void print_leaves(Tree tree)
+{
+	Queue queue = create();
+	queue = enqueue(queue, tree.root);
+	while (queue.length != 0)
+	{
+		if (queue.length != 0)
+		{
+			queue = descent(queue, queue.first->value, "print_leaves");
 		}
 	}
 }
@@ -186,5 +205,8 @@ int main()
 	tree = append(tree, 4);
 	tree = append(tree, 11);
 	tree = append(tree, 7);
+	cout << "Tree" << endl;
 	print(tree);
+	cout << "Leaves" << endl;
+	print_leaves(tree);
 }
