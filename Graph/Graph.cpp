@@ -95,14 +95,12 @@ Graph append(Graph graph, Cell cell)
 	Cell neighbor;
 	int number_of_neighbours;
 	int i, j;
-	int* neighbors = new int[cell.number_of_neighbors];
 	for (i = 0; i < cell.number_of_neighbors; i++)
 	{
 		for (j = 0; j < graph.length; j++)
 		{
 			if (graph.list[j].value == cell.neighbors[i].value)
 			{
-				cell.neighbors.push_back(graph.list[j]);
 				graph.list[j].neighbors.push_back(cell);
 				graph.list[j].number_of_neighbors += 1;
 			}
@@ -112,6 +110,7 @@ Graph append(Graph graph, Cell cell)
 	graph.length += 1;
 	return graph;
 }
+
 
 int index(Graph graph, int value)
 {
@@ -129,7 +128,6 @@ int index(Graph graph, int value)
 }
 
 
-
 void print(Graph graph)
 {
 	int i, j;
@@ -144,9 +142,33 @@ void print(Graph graph)
 	}
 }
 
+
+Graph BFS(Graph graph, int value)
+{
+	int length, i, j;
+	length = 0;
+	Queue unverified;
+	for (i = 0; i < graph.length; i++)
+		graph.list[i].distance = 0;
+	unverified = create_empty_queue();
+	unverified = enqueue(unverified, graph.list[index(graph, value)]);
+	while (unverified.first != nullptr)
+	{
+		for (i = 0; i < unverified.first->element.number_of_neighbors; i++)
+			if ((graph.list[index(graph, unverified.first->element.neighbors[i].value)].distance == 0) && (unverified.first->element.neighbors[i].value != value))
+			{
+				graph.list[index(graph, unverified.first->element.neighbors[i].value)].distance = graph.list[index(graph, unverified.first->element.value)].distance + 1;
+				unverified = enqueue(unverified, graph.list[index(graph, unverified.first->element.neighbors[i].value)]);
+			}
+		unverified = dequeue(unverified);
+	}
+	return graph;
+}
+
+
 int main()
 {
-	int i;
+	int i, root, top;
 	setlocale(0, "");
 	Cell* cells = new Cell[4];
 	Graph graph;
@@ -175,9 +197,25 @@ int main()
 	Cell new_cell;
 	new_cell.value = 5;
 	new_cell.number_of_neighbors = 3;
-	new_cell.neighbors.push_back(graph.list[0]);
-	new_cell.neighbors.push_back(graph.list[2]);
-	new_cell.neighbors.push_back(graph.list[3]);
+	new_cell.neighbors.push_back(graph.list[index(graph, 1)]);
+	new_cell.neighbors.push_back(graph.list[index(graph, 3)]);
+	new_cell.neighbors.push_back(graph.list[index(graph, 4)]);
 	graph = append(graph, new_cell);
+	Cell new_cell2;
+	new_cell2.value = 6;
+	new_cell2.number_of_neighbors = 1;
+	new_cell2.neighbors.push_back(graph.list[index(graph, 4)]);
+	graph = append(graph, new_cell2);
+	Cell new_cell3;
+	new_cell3.value = 7;
+	new_cell3.number_of_neighbors = 2;
+	new_cell3.neighbors.push_back(graph.list[index(graph, 2)]);
+	new_cell3.neighbors.push_back(graph.list[index(graph, 6)]);
+	graph = append(graph, new_cell3);
+	/*BFS*/
+	root = 5;
+	graph = BFS(graph, root);
 	print(graph);
+	top = 7;
+	cout << "Расстояние между вершинами "<< root << " и " << top << " равно " << graph.list[index(graph, top)].distance << endl;
 }
